@@ -14,6 +14,8 @@ const {
  getAllVideos,
  addVideo
 } = require('./data/data')
+const nodeInteface = require('./node') 
+
 const graphqlHTTP = require('express-graphql') 
 const app = require('express')() 
 const port = 3333; 
@@ -23,7 +25,7 @@ const VideoType = new GraphQLObjectType({
   description: "whatever",
   fields:{
     id: {
-      type: GraphQLID, 
+      type: new GraphQLNonNull(GraphQLID), 
       description: "id"
     } , 
     name: {
@@ -38,7 +40,8 @@ const VideoType = new GraphQLObjectType({
       type: GraphQLInt,
       description: "duration"
     } 
-  }
+  },
+  interfaces: [nodeInteface] // a regular interface similar concept . 
 })
 
 const queryType = new GraphQLObjectType({
@@ -108,3 +111,9 @@ app.use('/graphql' , graphqlHTTP({
   graphiql: true 
 }))
 app.listen(port , _=> console.log(`app is litenting on port ${port}`)) 
+
+exports.VideoType = VideoType 
+
+// to share fields between types in graphql ... 
+// when we want to have a set of possible fields a type could have . 
+// we use graphqlinterfacetype 
