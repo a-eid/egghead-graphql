@@ -55,7 +55,7 @@ const resolvers = {
   videos: () => videos 
 }
 
-/*
+/*** 
 // query is not needed since we will be issuing queries form graphiql 
 const query = `
 query myFirstQuery{

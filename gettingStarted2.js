@@ -98,4 +98,5 @@ app.use('/graphql' , graphqlHTTP({
   graphiql: true 
 }))
 
-app.listen(PORT , () => console.log(`app running on http://localhost:${PORT}`)) 
+app.listen(PORT , 
+  () => console.log(`app running on http://localhost:${PORT}`)) 
