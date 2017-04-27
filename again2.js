@@ -1,4 +1,5 @@
 const {
+  GraphQLInputObjectType, 
   GraphQLNonNull, 
   GraphQLSchema, 
   GraphQLString , 
@@ -53,7 +54,7 @@ const queryType = new GraphQLObjectType({
           description: "id of the requested video"
         }
       }, 
-      resolve: (_ , args) => getVideoById(args.id) 
+      resolve: (_,args) => getVideoById(args.id) 
     },
     videos: {
       type: new GraphQLList(VideoType) ,
@@ -63,27 +64,37 @@ const queryType = new GraphQLObjectType({
   }
 })
 
+const videoInputType = new GraphQLInputObjectType({
+  name: "videoInputType",
+  fields:{
+    name: {
+      type: GraphQLString,
+      description: "name"
+    } , 
+    released: {
+      type: GraphQLBoolean , 
+      description: "released"
+    } , 
+    duration: {
+      type: GraphQLInt,
+      description: "duration"
+    } 
+  }
+})
+
 const mutationType = new GraphQLObjectType({
   name: "MutationType" , 
   description: "the root mutation query " , 
   fields:{
     addNewVideo:{
+      description:"to add a new video to the existing list of videos", 
       type: VideoType, // what we gonna query on after we run the mutation . 
       args:{
-        name: {
-          type: GraphQLString,
-          description: "name"
-        } , 
-        released: {
-          type: GraphQLBoolean , 
-          description: "released"
-        } , 
-        duration: {
-          type: GraphQLInt,
-          description: "duration"
-        } 
+        video:{
+          type: new GraphQLNonNull(videoInputType)
+        }
       },
-      resolve: (_ , args) => addVideo(args)
+      resolve: (_ , args) => addVideo(args.video)
     }
   }
 })
